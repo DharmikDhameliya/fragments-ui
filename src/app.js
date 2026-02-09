@@ -33,10 +33,12 @@ async function init() {
     console.log('User is logged in', user);
     document.getElementById('login').style.display = 'none';
     document.getElementById('logout').style.display = 'block';
+    document.getElementById('fragmentControls').style.display = 'block';
   } else {
     console.log('User is not logged in');
     document.getElementById('login').style.display = 'block';
     document.getElementById('logout').style.display = 'none';
+    document.getElementById('fragmentControls').style.display = 'none';
   }
 
   // Attach event listeners
@@ -48,6 +50,87 @@ async function init() {
   document.getElementById('logout').onclick = () => {
     logout();
   };
+
+  document.getElementById('createFragment').onclick = async () => {
+    const text = document.getElementById('fragmentText').value;
+    if (!text) {
+      alert('Please enter some text');
+      return;
+    }
+    await createFragment(text);
+  };
+
+  document.getElementById('listFragments').onclick = async () => {
+    await listFragments();
+  };
+}
+
+// Create a new text fragment
+async function createFragment(text) {
+  const user = await getUser();
+  if (!user) {
+    alert('You must be logged in');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${process.env.API_URL}/v1/fragments`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${user.id_token}`,
+        'Content-Type': 'text/plain',
+      },
+      body: text,
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    console.log('Created fragment:', data);
+    
+    document.getElementById('output').innerHTML = `
+      <h3>Fragment Created!</h3>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+    `;
+  } catch (err) {
+    console.error('Error creating fragment:', err);
+    document.getElementById('output').innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+  }
+}
+
+// List all fragments for the current user
+async function listFragments() {
+  const user = await getUser();
+  if (!user) {
+    alert('You must be logged in');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${process.env.API_URL}/v1/fragments`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${user.id_token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    console.log('Fragments:', data);
+    
+    document.getElementById('output').innerHTML = `
+      <h3>Your Fragments</h3>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+    `;
+  } catch (err) {
+    console.error('Error listing fragments:', err);
+    document.getElementById('output').innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+  }
 }
 
 init();

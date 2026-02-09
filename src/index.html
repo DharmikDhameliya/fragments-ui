@@ -2,17 +2,28 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fragments UI</title>
 </head>
 
 <body>
-    <h1>Fragments UI</h1>
-    <button id="login">Login</button>
-    <button id="logout" style="display:none">Logout</button>
+    <h1>Fragments Microservice</h1>
 
-    <!-- This line is critical -->
-    <script type="module" src="./app.js"></script>
+    <button id="login">Login</button>
+    <button id="logout" style="display: none;">Logout</button>
+
+    <div id="fragmentControls" style="display: none; margin-top: 20px;">
+        <h2>Create a Fragment</h2>
+        <textarea id="fragmentText" rows="4" cols="50" placeholder="Enter text here..."></textarea>
+        <br>
+        <button id="createFragment">Create Fragment</button>
+        <button id="listFragments">List My Fragments</button>
+    </div>
+
+    <div id="output" style="margin-top: 20px;"></div>
+
+    <script src="./app.js" type="module"></script>
 </body>
 
 </html>
