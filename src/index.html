@@ -5,23 +5,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fragments UI</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        section {
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+            border-radius: 4px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        #fragmentList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #fragmentList li {
+            background: #fafafa;
+            margin-bottom: 5px;
+            padding: 8px;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Fragments Microservice</h1>
 
-    <button id="login">Login</button>
-    <button id="logout" style="display: none;">Logout</button>
-
-    <div id="fragmentControls" style="display: none; margin-top: 20px;">
-        <h2>Create a Fragment</h2>
-        <textarea id="fragmentText" rows="4" cols="50" placeholder="Enter text here..."></textarea>
-        <br>
-        <button id="createFragment">Create Fragment</button>
-        <button id="listFragments">List My Fragments</button>
+    <div id="authSection">
+        <button id="login">Login</button>
+        <button id="logout" style="display: none;">Logout</button>
     </div>
 
-    <div id="output" style="margin-top: 20px;"></div>
+    <div id="fragmentControls" style="display: none; margin-top: 20px;">
+
+        <section>
+            <h2>1. Create / Update Content</h2>
+            <textarea id="fragmentText" rows="6" placeholder="Enter fragment content here..."></textarea>
+            <div class="controls">
+                <label for="fragmentType">Type:</label>
+                <select id="fragmentType">
+                    <option value="text/plain">text/plain</option>
+                    <option value="text/markdown">text/markdown</option>
+                    <option value="text/html">text/html</option>
+                    <option value="application/json">application/json</option>
+                </select>
+                <button id="createFragment">Create New Fragment</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Manage Existing Fragment</h2>
+            <div class="controls">
+                <input type="text" id="fragmentId" placeholder="Fragment ID" style="flex-grow: 1;">
+                <input type="text" id="fragmentExt" placeholder=".html, .txt, .json" style="width: 80px;">
+            </div>
+            <div class="controls">
+                <button id="getFragment">View/Convert Data</button>
+                <button id="updateFragment" style="background-color: #fff3cd;">Update Data (PUT)</button>
+                <button id="deleteFragment" style="background-color: #f8d7da;">Delete Fragment</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Your Fragments</h2>
+            <button id="listFragments">Refresh List</button>
+            <ul id="fragmentList"></ul>
+        </section>
+
+    </div>
+
+    <div id="outputSection">
+        <h2>Output</h2>
+        <div id="output"><em>No output yet.</em></div>
+    </div>
 
     <script src="./app.js" type="module"></script>
 </body>
